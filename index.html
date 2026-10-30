@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Selamat Ulang Tahun</title>
+<style>
+:root{--navy:#070f26;--deep:#0f2152;--royal:#2f5bd8;--sky:#8ec5ff;--ice:#e8f1ff;--gold:#ffd98a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{display:flex;flex-direction:column;height:100dvh;overflow:hidden;color:var(--ice);background:var(--navy);font-family:"Avenir Next","Segoe UI",system-ui,sans-serif}
+.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 18% 8%,rgba(47,91,216,.45),transparent 45%),radial-gradient(circle at 85% 85%,rgba(59,125,255,.28),transparent 42%),linear-gradient(#070f26,#0f2152)}
+.star{position:absolute;width:3px;height:3px;border-radius:50%;background:#cfe3ff;animation:tw 3s ease-in-out infinite alternate}
+@keyframes tw{from{opacity:.15}to{opacity:.9}}
+header{text-align:center;padding:max(10px,env(safe-area-inset-top)) 16px 2px}
+h1{margin:0;font:400 clamp(1.4rem,4.5vw + .4rem,2.8rem)/1.15 Georgia,"Times New Roman",serif;background:linear-gradient(90deg,#ffffff,#93befa);-webkit-background-clip:text;background-clip:text;color:transparent}
+header p{margin:3px 0 0;opacity:.75;font-size:clamp(.78rem,2vw,1rem)}
+main{flex:1;position:relative;min-height:0}
+.sec{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 16px 12px;overflow-y:auto;opacity:0;visibility:hidden;transform:translateY(14px) scale(.985);transition:opacity .45s,transform .45s,visibility 0s .45s}
+.sec.active{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+nav{display:flex;justify-content:center;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(8,18,46,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid rgba(142,197,255,.22)}
+.tab{flex:1;max-width:170px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;border:1px solid transparent;border-radius:14px;background:none;color:var(--ice);font:inherit;font-size:.78rem;opacity:.65;cursor:pointer;transition:.25s}
+.tab .ic{font-size:1.25rem;line-height:1}
+.tab:hover{opacity:.9}
+.tab.on{opacity:1;background:rgba(47,91,216,.4);border-color:rgba(142,197,255,.45)}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+/* cake */
+.cake-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;max-width:980px}
+#cakeSvg{display:block;width:min(86vw,42dvh,440px);height:auto;touch-action:manipulation;overflow:visible}
+.panel{text-align:center;max-width:460px}
+.panel h2{margin:0 0 4px;font:400 clamp(1.1rem,3vw + .3rem,1.7rem)/1.25 Georgia,serif}
+.hint{margin:0;opacity:.8;font-size:.92rem}
+.status{margin:8px 0 10px;min-height:1.5em;font-weight:600;color:var(--sky)}
+.status.done{color:var(--gold);font-size:1.05rem}
+.btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.btn{padding:10px 18px;border-radius:999px;border:1px solid rgba(142,197,255,.5);background:linear-gradient(135deg,#3f72ff,#2548b8);color:#fff;font:600 .92rem inherit;font-family:inherit;cursor:pointer;transition:.2s;box-shadow:0 4px 14px rgba(20,50,150,.45)}
+.btn:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.1)}
+.btn.ghost{background:rgba(255,255,255,.06);box-shadow:none}
+.btn.gold{background:linear-gradient(135deg,#ffffff,#ffffff);color:#3a2a00;border-color:#000000}
+.btn:disabled{opacity:.4;cursor:default}
+.btn:active:not(:disabled){background:#8a8f99;border-color:#b5b9c2;box-shadow:none;transform:none}
+.candle{cursor:pointer;outline:none}
+.candle:hover .body,.candle:focus-visible .body{filter:brightness(1.15)}
+.hit{fill:rgba(0,0,0,0);pointer-events:all}
+.flame{transition:opacity .25s,transform .25s;transform-box:fill-box;transform-origin:50% 100%}
+.candle:not(.lit) .flame{opacity:0;transform:scale(.2)}
+.fl{transform-box:fill-box;transform-origin:50% 100%;animation:flick .45s ease-in-out infinite alternate}
+@keyframes flick{0%{transform:scale(1) rotate(-1.5deg)}50%{transform:scale(.94,1.08) rotate(1.5deg)}100%{transform:scale(1.04,.96) rotate(-.5deg)}}
+.sm{fill:#cfe0ff;opacity:0}
+.puff .sm{animation:smoke 1.3s ease-out forwards}
+.puff .sm:nth-of-type(2){animation-delay:.15s}
+@keyframes smoke{0%{opacity:.7;transform:translate(0,0) scale(.6)}100%{opacity:0;transform:translate(6px,-34px) scale(2.2)}}
+#confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:20}
+.cf{position:absolute;top:-14px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translate3d(var(--x),110dvh,0) rotate(720deg)}}
+/* messages */
+.msgwrap{width:min(100%,680px);text-align:center}
+.mtitle{margin:0;font:400 clamp(1.15rem,3vw + .4rem,1.8rem)/1.25 Georgia,serif}
+.msub{margin:4px 0 14px;opacity:.7;font-size:.88rem}
+.viewer{position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.card{text-align:left;padding:clamp(18px,4vw,34px);max-height:min(50dvh,420px);overflow-y:auto;border-radius:22px;border:1px solid rgba(142,197,255,.3);background:linear-gradient(160deg,rgba(47,91,216,.36),rgba(17,34,74,.8));box-shadow:0 14px 40px rgba(0,0,20,.45);transition:opacity .25s,transform .25s;transform:none;opacity:1}
+.card.leave{opacity:0;transform:translateX(var(--dx,0))}
+.qm{font:4rem/.6 Georgia,serif;color:var(--sky);height:.5em;opacity:.8}
+.txt{margin:10px 0 0;font:clamp(1rem,2.4vw + .55rem,1.3rem)/1.7 Georgia,serif;white-space:pre-line}
+.from{margin:14px 0 0;text-align:right;color:var(--gold);font:italic 1rem Georgia,serif}
+.card.letter{max-height:min(60dvh,540px)}
+.letter .txt+.txt{margin-top:1em}
+@media (max-height:480px) and (orientation:landscape){.card.letter{max-height:48dvh}}
+.special .card{border-color:rgba(255,217,138,.6);animation:glow 3s ease-in-out infinite alternate}
+@keyframes glow{from{box-shadow:0 14px 40px rgba(0,0,20,.45),0 0 0 rgba(255,217,138,0)}to{box-shadow:0 14px 40px rgba(0,0,20,.45),0 0 28px rgba(255,217,138,.35)}}
+.ov{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;border:1px solid rgba(142,197,255,.5);background:rgba(15,33,82,.9);color:#fff;font-size:1.5rem;line-height:1;cursor:pointer;opacity:0;transition:.25s}
+.ov.prev{left:-14px}.ov.next{right:-14px}
+.viewer:hover .ov:not(:disabled),.ov:focus-visible{opacity:1}
+@media (hover:none){.ov{display:none}}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px}
+.mid{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.8rem;opacity:.85}
+.dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.dots i{width:7px;height:7px;border-radius:50%;background:rgba(142,197,255,.35);transition:.3s}
+.dots i.on{width:20px;border-radius:5px;background:var(--sky)}
+.bar .btn{padding:9px 14px;font-size:.85rem}
+/* responsive */
+@media (min-aspect-ratio:1/1){
+  .cake-wrap{flex-direction:row;justify-content:center;gap:clamp(16px,4vw,48px)}
+  #cakeSvg{width:min(44vw,66dvh,520px)}
+}
+@media (max-height:480px) and (orientation:landscape){
+  header p{display:none}
+  h1{font-size:1.15rem}
+  .tab{flex-direction:row;justify-content:center;gap:6px;padding:5px}
+  .card{max-height:44dvh}.msub{margin-bottom:8px}
+}
+@media (max-width:360px){.tab{font-size:.68rem}.btn{padding:9px 12px;font-size:.84rem}}
+@media (min-width:1400px){html{font-size:18px}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="bg" id="bg"></div>
+<header><h1 id="hTitle"></h1><p id="hSub"></p></header>
+<main id="stage"></main>
+<nav id="nav" role="tablist"></nav>
+<div id="confetti" aria-hidden="true"></div>
+
+<script>
+/* ========== KONFIGURASI: ubah isi di bagian ini saja ========== */
+const BIRTHDAY_CONFIG = {
+  name: "Shalma Iva Wardana",
+  title: "Selamat Ulang Tahun, {name}!",
+  ui: {
+    prev: "‹ Sebelumnya",
+    next: "Selanjutnya ›",
+    nextSection: "Berikutnya ›",
+    backToStart: "Kembali ke awal"
+  },
+  cake: {
+    tabLabel: "Happy Birthday!",
+    title: "Buat permintaan, lalu tiup lilinnya",
+    wish: "Semoga semua doa Shalma segera dikabulkan, Aamiin",
+    blowAll: "Tiup Semua", relight: "Nyalakan Lagi", goMessages: "Baca pesan dari yang disayang"
+  },
+  friends: {
+    tabLabel: "Friends <3",
+    title: "Pesan dari temen temen yang sayang kamu",
+    subtitle: "Geser atau gunakan tombol untuk membaca",
+    messages: [
+      { from: "Baib", text: "happy besday salma 'amarah' iffa wardana (ipeh, emuy) semoga panjang umur sehat selalu, kurang kurangin marah nya nanti cepet ubanan, btw boleh kali TF 100 dulu\n\nkado nya doa nya aja ya"},
+      { from: "Rai", text: "hbd my shalmuy gue yg gemas n hot bgt 🫦🫦🥵🥵🥵 panjang umur sehat selalu dilancarkan rezeki dan segala urusannya💗💗💗💗 wish u a happy birthday 🎊🎉🎂🎁🎈" },
+      { from: "Valtho", text: "selamat ulangtahun ka blue (shalma), semoga semua harapan kaka di tahun ini cepat  terkabul yaa,aminn.HAPPY HBD KA 😁🥳🥳" },
+      { from: "Biel (cami)", text: "happy birthdayyy, shalmaa!  another year older, another year wiser. semoga di umur yang baru ini, lo selalu dikasih kesehatan, kebahagiaan, rezeki yang lancar, & banyak hal baik yang datang ke hidup lo. semoga kerjaan lo juga selalu dilancarkan, dijauhkan dari orang-orang yang bikin capek, dan tetap punya waktu buat diri sendiri di tengah kesibukan. have the happiest birthday, enjoy your special day, and stay the lovely person you are!" },
+      { from: "Bas (capap)", text: "Hbd ultah ulang tahun salmuy smoga tetep jadi peri kecil,semuanya di lancarin,sehat slalu bahagia sama papi haze,wish u all the best"},
+      { from: "Bedul", text: "HBD peri selamat ultah tahun, semoga panjang umur, sehat selalu, diberi rezeki yang halal, ilmu yang bermanfaat, juga semoga spukinya awet sampe kebeli motor baru"},
+      { from: "Kimpul", text: "Halooo Kak Periii, met nambah umur yaaa! 🎉✨ Selamat karena jatah tinggal di bumi resmi berkurang setahun 😜 Tapi gapapa, yang penting makin tua makin kece dan berwibawa (dikit lah ya wkwk) 😎 Sesuai prosedur per-ulangtahun-an, wajib hukumnya ngedoain yang baik-baik: Semoga Kak Peri selalu dikasih kesehatan lahir batin 💪✨, rejeki melimpah ruah sampai dompet sama rekening kebingungan nampungnya 💰💸, dan semua urusan lancar jaya tanpa hambatan kayak jalan tol sepi 🚀 Semoga tahun ini hidup lu makin banyak bahagianya daripada pusingnya, dikelilingi orang-orang baik, dan semua wishlist tersimpan bisa terwujud satu per satu! ✅🎯 Dah lah ya, ucapan sepanjang ini tidak gratis, bisa ditukar dengan tumpeng, boba, atau minimal bakso semangkok 🎂🍔😋 Lopyu Kak Peri"},
+      { from: "Opii", text: "Happiest birthday to my peri acuuuu, wish u all the best yaaa. Kiranya di usia yang bertambah ini, semakin banyak hal-hal bahagia yang terjadi dalam hidup peri, satu persatu harapan peri dikabulkan Tuhan. Aminn\n\n So happy bisa kenal perii, jangan stop jadi orang baik dan senang berbagi kebahagiaan yaaa sayangg 💗"},
+      { from: "Chacicuuu", text: "Happy birthday kak peri,sehat selalu, panjang umur, dilancarkan segala urusannya, dan jangan pernah berhenti mengejar apa yang kamu mau.\n\nMore happiness, more blessings, and more good things ahead. Bahagia selalu yaa kak periii 💗"},
+      { from: "Pici", text: "KAK PERIII UYUTKU SAYANGKU HAPPY BIRTHDAY YAAA 😾🤍 may Allah bless u always n fill ur days with happiness. never lose the beautiful soul that u have ya kak <3  aku syg km bgt anjir muachhh, SEMANGAT KERJANYA, SEHAT SELALU, BAHAGIA SELALU, SEMANGAT TERUS  NGAJINYA YAA, POKOKNYA AK SELALU DOAIN KM TERUS DEHHH SUPAYA KM GACOR TERUS HIDUPNYA 💞😻💞😻💞\n\nsyg sm ak trs ya yut 🤍"},
+      { from: "Khalil", text: "happy birthday shalma, semoga diumur yang lebih tua ini bisa lebih softspoken dan makin gencar menyebarkan syariat islam😇 semoga menjadi manusia Indonesia yang mampu menghidupkan nilai-nilai spiritualitas negeri, budaya-budaya adi luhung, yang memanusiakan manusia dan seluruh alam ciptaannya, seluruh penghuni negeri, seluruh mahluk, mahluk yang kelihatan dan yang tidak kelihatan. Manusia, hewan dan tumbuhan, air, udara dan cahaya. Semua yang melingkupi negeri ini, dalam sebuah keseimbangan semesta. Menghormati dan menegakkan hukum alam, lebih banyak memberi maka akan semakin banyak menerima. Menyadari bahwa banyak mengambil akan semakin banyak kehilangan😇🙏"}
+    ]
+  },
+  relatives: {
+    tabLabel: "Your Closest Friends",
+    title: "A little messages from the one who knows you better than anyone",
+    messages: [
+      { from: "Pisang (ur bini)", text: "happy birthday my emuy gua, u know i'll always love u more than u thought (walau lu ngga gt ke gua anjing). hopefully at your age lu akan bahagia selalu (tentu ada gua), gua mau ngasih wish panjang dan mellow tapi gak disini (kasihan haje ntar repot) ILYSMMM" },
+      { from: "gee", text: "Selamat birthday my peri my samuy my giselle my forever partner bascrat di kantor!\n\nPertama-tama kami panjatkan puji syukur kepada Allah YME atas bertambahnya usia my samuy. Semoga di usia yang baru ini, Allah senantiasa melimpahkan keberkahan, kebahagiaan, dan perlindungan-Nya dalam setiap langkahmu. Semoga perjalanan hijrahmu selalu dimudahkan, dikuatkan hatinya dalam istiqamah, dan semakin didekatkan kepada Allah SWT. Serta semakin rajin membaca ayat suci Al-Quran.\n\nTidak harus menjadi sempurna untuk menjadi lebih baik. Semoga setiap proses, doa, dan usaha kecilmu dalam memperbaiki diri menjadi ladang pahala. Semoga Allah selalu membimbingmu menjadi perempuan yang sholehah, yang hatinya teduh, lisannya baik, akhlaknya indah, dan selalu membawa kebaikan bagi orang-orang di sekitarnya.\n\nMay Allah bless you with a heart that never stops finding its way back to Him. Keep growing, keep shining, and keep istiqamah. So proud of your journey! I love you samuy my bascrat 🤍✨"},
+      { from: "nunu", text: "Happy birthday my teman bestie sahabat aku yang paling dewasa dan udah gedeeeee😝🤙🏻 Selamat memasuki usia yang lebih dewasa lagiii yaaahh, semoga di umur yang ke 23 inii peri shalmuy emuuooy bisa jadi orang yang lebih bijaksanaa, dewasaa, dann selalu dikelilingi orang orang baikkk dan dijauhkan dari yang jahat jahaaat🤍 bahagia sehat selaluu sayang akuuu!!\n\nJangan sering ngambek ngambek lagiii yaaa, hindari makanan pedas atau aku datengin trus aku jewer sampe putus kupingnya!!😠 LOPYUUU 🫶🏻😘"},
+      { from: "edo", text: "Happy birthday Shalma Iva Wardhana. Selamat merayakan ulang tahun. Mari kita pantun. \n\nAwan cerah langit biru,\n Mentari menyengat di hari Minggu.\n Selamat ulang tahun buatmu,\n Selamat mendekati ajalmu\n\n Asekkk. Semoga di bertambahnya usia semakin diberkati Tuhan dalam kesehatan, karir dan kehidupan. Wish u all the best dan semoga tobat mimi alkoholnyaaa yakk 💥💥"},
+      { from: "orell", text: "Happy birthday cintakuhh. Moga semakin manteb, semakin hot, semakin cantik, semakin banyak duitnya, semakin baik hidupnya, semakin solehah. Semoga umurnya semakin berkah. I hope life always treats you good yaww.\n\nI love you mwah💋"}
+    ]
+  },
+  partner: {
+    tabLabel: "Spesial", special: true,
+    onePage: true, /* true = semua pesan jadi satu halaman utuh; false = satu pesan per layar */
+    title: "Untukmu, my beloved bini mbg my mine guweh",
+    sender: "With Love, Haze", /* satu pengirim untuk semua pesan di section ini */
+    messages: [
+      { text: "Happy birthday, my favorite person." },
+      { text: "I wanted to make something a little different for your birthday. Semoga kamu suka with this little corner of the internet yang aku buat spesial buat kamu yaaa <3" },
+      { text: "Semoga dengan bertambahnya umur kamu, rezeki kamu juga ikut bertambah. makin banyak orang orang baik yang hadir di hidupmu, makin bahagia, makin berkah hidupnya, pokoknya makin makin (in a positive way) dehh HAHAHAHA. I wish you a happy birthday <3" },
+      { text: "I may not always have the perfect words, but i hope i can always remind you that you are loved, appreciated, and never alone." },
+    ]
+  }
+};
+/* ========== AKHIR KONFIGURASI ========== */
+
+(function () {
+  "use strict";
+  var C = BIRTHDAY_CONFIG, UI = C.ui, N = 5;
+  var $ = function (s) { return document.querySelector(s); };
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  var defs = [
+    Object.assign({ key: "cake" }, C.cake), Object.assign({ key: "friends" }, C.friends),
+    Object.assign({ key: "relatives" }, C.relatives), Object.assign({ key: "partner" }, C.partner)
+  ];
+  var state = { sec: 0, msg: [0, 0, 0, 0], lit: [], done: false };
+  for (var k = 0; k < N; k++) state.lit.push(true);
+  var stage = $("#stage"), nav = $("#nav"), secEls = [], tabs = [], ctrls = [];
+  var title = C.title.replace("{name}", C.name);
+  $("#hTitle").textContent = title; $("#hSub").textContent = C.subtitle; document.title = title;
+
+  /* bintang latar */
+  for (var s = 0; s < 230; s++) {
+    var st = el("span", "star"); st.style.left = Math.random() * 100 + "%"; st.style.top = Math.random() * 100 + "%";
+    st.style.animationDelay = (Math.random() * 3) + "s"; $("#bg").appendChild(st);
+  }
+
+  /* ---------- navigasi section ---------- */
+  function go(i) {
+    if (i === state.sec || i < 0 || i >= secEls.length) return;
+    secEls[state.sec].classList.remove("active"); secEls[state.sec].setAttribute("aria-hidden", "true");
+    state.sec = i; var s2 = secEls[i];
+    s2.classList.add("active"); s2.removeAttribute("aria-hidden"); s2.scrollTop = 0;
+    tabs.forEach(function (t, j) { t.classList.toggle("on", j === i); t.setAttribute("aria-selected", j === i ? "true" : "false"); });
+  }
+  defs.forEach(function (d, i) {
+    var sec = el("section", "sec" + (d.special ? " special" : "")); sec.setAttribute("aria-hidden", "true");
+    stage.appendChild(sec); secEls.push(sec);
+    var t = el("button", "tab"); t.type = "button"; t.setAttribute("role", "tab");
+    t.appendChild(el("span", "ic", d.icon)); t.appendChild(el("span", "lb", d.tabLabel));
+    t.addEventListener("click", function () { go(i); }); nav.appendChild(t); tabs.push(t);
+    if (i === 0) buildCake(sec); else ctrls[i] = buildMsgs(sec, i, d);
+  });
+  secEls[0].classList.add("active"); secEls[0].removeAttribute("aria-hidden");
+  tabs[0].classList.add("on"); tabs[0].setAttribute("aria-selected", "true");
+
+  /* ---------- kue ---------- */
+  function buildCake(sec) {
+    var CL = ["#ff8fb1", "#ffd166", "#7ee0c3", "#ff9f68", "#b9a2ff"], DC = CL.concat(["#6ec6ff"]);
+    var xs = [105, 132, 160, 188, 215], h = "", i, x;
+    h += '<defs><linearGradient id="gT" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b97ff"/><stop offset="1" stop-color="#2a4fc4"/></linearGradient>' +
+      '<linearGradient id="gB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a7bf0"/><stop offset="1" stop-color="#1d3796"/></linearGradient>' +
+      '<linearGradient id="gF" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ffb347"/><stop offset="1" stop-color="#fff3b0"/></linearGradient>' +
+      '<radialGradient id="gG"><stop offset="0" stop-color="rgba(255,220,130,.85)"/><stop offset="1" stop-color="rgba(255,220,130,0)"/></radialGradient></defs>';
+    h += '<ellipse cx="160" cy="294" rx="140" ry="12" fill="#030816" opacity=".5"/><ellipse cx="160" cy="285" rx="136" ry="14" fill="#dbe8ff"/>';
+    h += '<rect x="45" y="196" width="230" height="90" rx="14" fill="url(#gB)"/><rect x="45" y="232" width="230" height="5" fill="rgba(255,255,255,.3)"/>';
+    h += '<rect x="45" y="196" width="230" height="14" rx="7" fill="#f4f8ff"/>';
+    for (i = 0, x = 57; x < 262; x += 26, i++) h += '<rect x="' + x + '" y="202" width="13" height="' + (12 + (i % 3) * 8) + '" rx="6.5" fill="#f4f8ff"/>';
+    for (i = 0; i < 9; i++) h += '<circle cx="' + (62 + i * 24.5) + '" cy="261" r="5.5" fill="' + DC[i % 6] + '"/>';
+    h += '<rect x="75" y="136" width="170" height="64" rx="12" fill="url(#gT)"/><rect x="75" y="136" width="170" height="12" rx="6" fill="#f4f8ff"/>';
+    for (i = 0, x = 87; x < 235; x += 26, i++) h += '<rect x="' + x + '" y="142" width="12" height="' + (10 + (i % 3) * 7) + '" rx="6" fill="#f4f8ff"/>';
+    for (i = 0; i < 6; i++) h += '<circle cx="' + (95 + i * 26) + '" cy="183" r="4.5" fill="' + DC[(i + 2) % 6] + '"/>';
+    for (i = 0; i < N; i++) {
+      x = xs[i];
+      h += '<g class="candle lit" data-i="' + i + '" tabindex="0" role="button" aria-label="Lilin ' + (i + 1) + '">' +
+        '<rect class="hit" x="' + (x - 15) + '" y="52" width="30" height="88"/>' +
+        '<g class="body"><rect x="' + (x - 5) + '" y="94" width="10" height="42" rx="2.5" fill="' + CL[i] + '"/>' +
+        '<rect x="' + (x - 5) + '" y="106" width="10" height="4" fill="#fff" opacity=".55"/><rect x="' + (x - 5) + '" y="120" width="10" height="4" fill="#fff" opacity=".55"/>' +
+        '<line x1="' + x + '" y1="94" x2="' + x + '" y2="88" stroke="#2a2a3a" stroke-width="1.8" stroke-linecap="round"/></g>' +
+        '<g transform="translate(' + x + ' 87)"><g class="flame"><circle cy="-9" r="19" fill="url(#gG)"/><g class="fl" style="animation-delay:-' + (i * 0.11) + 's">' +
+        '<path d="M0 -20 C7 -11 8 -4 0 3 C-8 -4 -7 -11 0 -20Z" fill="url(#gF)"/><ellipse cy="-4" rx="2.5" ry="4" fill="#fff" opacity=".85"/></g></g>' +
+        '<circle class="sm" cy="-6" r="3"/><circle class="sm" cx="2" cy="-8" r="2.5"/></g></g>';
+    }
+    var wrap = el("div", "cake-wrap"), art = el("div", "cake-art");
+    art.innerHTML = '<svg id="cakeSvg" viewBox="0 0 320 305" role="group" aria-label="Kue ulang tahun dengan 5 lilin">' + h + "</svg>";
+    var panel = el("div", "panel");
+    var status = el("p", "status"); status.setAttribute("aria-live", "polite");
+    var bAll = el("button", "btn", C.cake.blowAll), bRe = el("button", "btn ghost", C.cake.relight), bGo = el("button", "btn gold", C.cake.goMessages);
+    [bAll, bRe, bGo].forEach(function (b) { b.type = "button"; });
+    var btns = el("div", "btns"); btns.append(bAll, bRe, bGo);
+    panel.append(el("h2", "", C.cake.title), el("p", "hint", C.cake.hint), status, btns);
+    wrap.append(art, panel); sec.appendChild(wrap);
+    var cs = art.querySelectorAll(".candle"), timers = [];
+
+    function update() {
+      var n = 0;
+      state.lit.forEach(function (on, j) { cs[j].classList.toggle("lit", on); if (on) n++; });
+      var fin = n === 0;
+      status.className = "status" + (fin ? " done" : "");
+      status.textContent = fin ? C.cake.wish : n + " dari " + N + " lilin masih menyala";
+      bAll.disabled = fin; bRe.disabled = n === N; bGo.style.display = fin ? "" : "none";
+      if (fin && !state.done) confetti();
+      state.done = fin;
+    }
+    function blow(j) {
+      if (!state.lit[j]) return;
+      state.lit[j] = false; var c = cs[j];
+      c.classList.add("puff"); setTimeout(function () { c.classList.remove("puff"); }, 1400);
+      update();
+    }
+    art.addEventListener("click", function (e) {
+      var c = e.target.closest ? e.target.closest(".candle") : null;
+      if (c) blow(+c.getAttribute("data-i"));
+    });
+    art.addEventListener("keydown", function (e) {
+      var c = e.target.closest ? e.target.closest(".candle") : null;
+      if (c && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); blow(+c.getAttribute("data-i")); }
+    });
+    bAll.addEventListener("click", function () {
+      state.lit.forEach(function (on, j) { if (on) timers.push(setTimeout(function () { blow(j); }, timers.length * 130)); });
+      setTimeout(function () { timers = []; }, 1000);
+    });
+    bRe.addEventListener("click", function () {
+      timers.forEach(clearTimeout); timers = [];
+      for (var j = 0; j < N; j++) { state.lit[j] = true; cs[j].classList.remove("puff"); }
+      update();
+    });
+    bGo.addEventListener("click", function () { go(1); });
+    update();
+  }
+
+  function confetti() {
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var box = $("#confetti"), col = ["#ff8fb1", "#ffd166", "#7ee0c3", "#8ec5ff", "#b9a2ff", "#fff"];
+    for (var i = 0; i < 70; i++) {
+      var p = el("i", "cf"), w = 6 + Math.random() * 7;
+      p.style.cssText = "left:" + Math.random() * 100 + "%;width:" + w + "px;height:" + w * 1.5 + "px;background:" + col[i % 6] +
+        ";animation-duration:" + (2.4 + Math.random() * 2) + "s;animation-delay:" + Math.random() * .6 + "s;--x:" + (Math.random() * 120 - 60) + "px";
+      box.appendChild(p);
+    }
+    setTimeout(function () { box.textContent = ""; }, 5200);
+  }
+
+  /* ---------- pesan satu per satu ---------- */
+  function buildMsgs(sec, si, d) {
+    var msgs = d.messages || [], timer = null;
+    if (d.onePage) { /* semua pesan tampil sebagai satu surat utuh */
+      var w1 = el("div", "msgwrap"), c1 = el("article", "card letter");
+      c1.appendChild(el("div", "qm", "“"));
+      msgs.forEach(function (m) { c1.appendChild(el("p", "txt", m.text)); });
+      if (d.sender) c1.appendChild(el("p", "from", "— " + d.sender));
+      var b1 = el("button", "btn ghost", UI.backToStart); b1.type = "button"; b1.style.marginTop = "14px";
+      b1.addEventListener("click", function () { go(0); });
+      w1.append(el("h2", "mtitle", d.title), el("p", "msub", d.subtitle || ""), c1, b1); sec.appendChild(w1);
+      return { step: function () {} };
+    }
+    var wrap = el("div", "msgwrap"), viewer = el("div", "viewer"), card = el("article", "card");
+    var ovP = el("button", "ov prev", "‹"), ovN = el("button", "ov next", "›");
+    ovP.setAttribute("aria-label", "Pesan sebelumnya"); ovN.setAttribute("aria-label", "Pesan berikutnya");
+    var txt = el("p", "txt"), from = el("p", "from");
+    card.append(el("div", "qm", "“"), txt, from); card.setAttribute("aria-live", "polite");
+    viewer.append(ovP, card, ovN);
+    var bar = el("div", "bar"), bP = el("button", "btn ghost", UI.prev), bN = el("button", "btn", UI.next);
+    var mid = el("div", "mid"), dots = el("div", "dots"), count = el("span"), dEls = [];
+    msgs.forEach(function () { var dt = el("i"); dots.appendChild(dt); dEls.push(dt); });
+    if (msgs.length > 10) dots.style.display = "none";
+    mid.append(dots, count); bar.append(bP, mid, bN);
+    [ovP, ovN, bP, bN].forEach(function (b) { b.type = "button"; });
+    wrap.append(el("h2", "mtitle", d.title), el("p", "msub", d.subtitle || ""), viewer, bar); sec.appendChild(wrap);
+
+    function paint() {
+      var m = msgs[state.msg[si]] || { text: "Belum ada pesan.", from: "" };
+      var who = d.sender || m.from;
+      txt.textContent = m.text; from.textContent = who ? "— " + who : ""; card.scrollTop = 0;
+    }
+    function chrome() {
+      var i = state.msg[si], n = msgs.length;
+      dEls.forEach(function (x, j) { x.classList.toggle("on", j === i); });
+      count.textContent = n ? (i + 1) + " / " + n : "0 / 0";
+      bP.disabled = ovP.disabled = i <= 0; ovN.disabled = i >= n - 1;
+      bN.textContent = i < n - 1 ? UI.next : (si < defs.length - 1 ? UI.nextSection : UI.backToStart);
+    }
+    function show(dir) {
+      chrome(); if (timer) return;
+      card.style.setProperty("--dx", (-dir * 28) + "px"); card.classList.add("leave");
+      timer = setTimeout(function () {
+        paint(); card.style.transition = "none"; card.style.setProperty("--dx", (dir * 28) + "px");
+        void card.offsetWidth; card.style.transition = ""; card.classList.remove("leave"); timer = null; chrome();
+      }, 200);
+    }
+    function step(dir) {
+      var j = state.msg[si] + dir;
+      if (j < 0 || j >= msgs.length) return;
+      state.msg[si] = j; show(dir);
+    }
+    bP.addEventListener("click", function () { step(-1); });
+    ovP.addEventListener("click", function () { step(-1); });
+    ovN.addEventListener("click", function () { step(1); });
+    bN.addEventListener("click", function () {
+      if (state.msg[si] < msgs.length - 1) step(1); else go((si + 1) % defs.length);
+    });
+    /* swipe (touch, pen, mouse drag) */
+    var sx = 0, sy = 0, down = false;
+    viewer.addEventListener("pointerdown", function (e) { down = true; sx = e.clientX; sy = e.clientY; });
+    viewer.addEventListener("pointerup", function (e) {
+      if (!down) return; down = false;
+      var dx = e.clientX - sx, dy = e.clientY - sy;
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) step(dx < 0 ? 1 : -1);
+    });
+    viewer.addEventListener("pointercancel", function () { down = false; });
+    viewer.addEventListener("pointerleave", function () { down = false; });
+    paint(); chrome();
+    return { step: step };
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (state.sec > 0 && ctrls[state.sec]) {
+      if (e.key === "ArrowRight") ctrls[state.sec].step(1);
+      else if (e.key === "ArrowLeft") ctrls[state.sec].step(-1);
+    }
+  });
+})();
+</script>
+</body>
+</html>
